@@ -88,13 +88,22 @@ spec:
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].metadata.name' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.podSelector' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
+          
+          
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[] | select(.spec.podSelector == "{}") |.metadata.name' - ;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  "Ingress")' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes == "Egress") | .items[].metadata.name' - ;
+          
+          
           kubectl get destinationrules -A -o yaml | yq eval '.items[].spec.host' -;
           kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route[].destination[].port' -;
           
-          kubectl get pods -A -o yaml | yq eval '{ .items[].metadata.name .items[].spec.containers[0].image }' -;
+          kubectl get pods -A -o yaml | yq eval '{.items[].metadata.name .items[].spec.containers[0].image }' -;
+          
+          kubectl get pods -A -o yaml | yq eval ' .items[].spec.containers[0].image ' -;
+          
+          
+          
           
           
           
