@@ -84,7 +84,7 @@ spec:
           wget https://github.com/mikefarah/yq/releases/download/v4.4.1/yq_linux_amd64 -O /usr/bin/yq;
           chmod +x /usr/bin/yq;
           yq --version;
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[] | select(.spec.podSelector == {}) |  .metadata.name' -;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[] | select(.spec.podSelector == {}) |  .metadata.name:' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
           
           
