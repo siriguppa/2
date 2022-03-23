@@ -85,7 +85,7 @@ spec:
           chmod +x /usr/bin/yq;
           yq --version;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.podSelector' -;
-          
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
           
           
           
