@@ -88,7 +88,7 @@ spec:
         
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.podSelector == {})' -;
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  - Ingress ,- Egress)' -;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  Ingress and Egress)' -;
           
           
           
