@@ -91,7 +91,7 @@ spec:
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  "Ingress")' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes == "Egress") | .items[].metadata.name' - ;
           kubectl get destinationrules -A -o yaml | yq eval '.items[].spec.host' -;
-          kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route.destination[0].port' -;
+          kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route[].destination[].port' -;
           
           
           
