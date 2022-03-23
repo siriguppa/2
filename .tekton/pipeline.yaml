@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline
+spec:
+  params:
+     - name: repository
+       description: repository
+     - name: cluster
+       description: cluster name
+     - name: apikey
+       description: apikey
+  workspaces:
+    - name: pipeline-pvc
+  tasks:
+    - name: k8s-task
+      taskRef:
+        name: k8s-task
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: cluster
+          value: $(params.cluster)
+        - name: apikey
+          value: $(params.apikey) 
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
