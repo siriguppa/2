@@ -94,7 +94,7 @@ spec:
           kubectl get destinationrules -A -o yaml | yq eval '.items[].spec.host' -;
           kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route[].destination[].port' -;
           
-          kubectl get pods -A -o yaml | yq eval '{ .items[].metadata.name:, .items[].spec.containers[0].image }' -;
+          kubectl get pods -A -o yaml | yq eval '{ .items[].metadata.name .items[].spec.containers[0].image }' -;
           
           
           
