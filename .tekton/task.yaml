@@ -86,11 +86,11 @@ spec:
           yq --version;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.podSelector' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.podSelector == "{}")' - ;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | select(.podSelector == "{}") |.items[].metadata.name' - ;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  "Ingress")' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes == "Egress") | .items[].metadata.name' - ;
-          kubectl get destinationrules -A -o yaml | yq eval '.items[].spec.host[]' -;
-          kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route[].destination[].port' -;
+          kubectl get destinationrules -A -o yaml | yq eval '.items[].spec.host' -;
+          kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route.destination[0].port' -;
           
           
           
