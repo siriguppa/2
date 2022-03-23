@@ -84,13 +84,13 @@ spec:
           wget https://github.com/mikefarah/yq/releases/download/v4.4.1/yq_linux_amd64 -O /usr/bin/yq;
           chmod +x /usr/bin/yq;
           yq --version;
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.podSelector'-;
-        
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes'-;
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.podSelector == "{}")'- ;
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  "Ingress")'-;
-          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes == "Egress") | .items[].metadata.name'- ;
-          
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.podSelector' -;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.podSelector == "{}")' - ;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  "Ingress")' -;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes == "Egress") | .items[].metadata.name' - ;
+          kubectl get destinationrules -A -o yaml | yq eval '.items[].spec.host[]' -;
+          kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route[].destination[].port' -;
           
           
           
