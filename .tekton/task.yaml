@@ -84,7 +84,7 @@ spec:
           wget https://github.com/mikefarah/yq/releases/download/v4.4.1/yq_linux_amd64 -O /usr/bin/yq;
           chmod +x /usr/bin/yq;
           yq --version;
-          kubectl get pods -A -o yaml | yq eval '{ .items[].metadata.name:, .items[].spec.containers[0].image }' -
+        
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].metadata.name' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.podSelector' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
@@ -93,6 +93,8 @@ spec:
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes == "Egress") | .items[].metadata.name' - ;
           kubectl get destinationrules -A -o yaml | yq eval '.items[].spec.host' -;
           kubectl get virtualservice -A -o yaml | yq eval '.items[].spec.route[].destination[].port' -;
+          
+          kubectl get pods -A -o yaml | yq eval '{ .items[].metadata.name:, .items[].spec.containers[0].image }' -;
           
           
           
