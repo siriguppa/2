@@ -1,0 +1,90 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: k8s-task
+spec:
+  params:
+    - name: repository
+      description: the git repo
+    - name: revision
+      description: the revision
+      default: master
+    - name: apikey
+      description: the ibmcloud api key
+    - name: api
+      description: the ibmcloud api endpoint
+      default: "https://cloud.ibm.com"
+    - name: cluster
+      description: cluster name
+   
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts   
+  steps:
+    - name: clone-repo
+      image: alpine/git
+      env:
+        - name: REPOSITORY
+          value: $(params.repository)
+        - name: REVISION
+          value: $(params.revision)
+      command: ["/bin/sh", "-c"]
+      args:
+        - set -e -o pipefail;
+          url="https://github.com/siriguppa/k8s.git";
+          echo "Cloning $REPOSITORY";
+          cd /workspace && git clone -q  $url .;
+    - name: k8scmd
+      image: ibmcom/pipeline-base-image
+      env:
+        - name: IBMCLOUD_API_KEY
+          value: $(params.apikey)
+        - name: KUBERNETES_CLUSTER_NAME
+          value: $(params.cluster)
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+         
+          ibmcloud login -a $(params.api) --no-region --apikey $IBMCLOUD_API_KEY;
+          cd /workspace;
+          export IKS_BETA_VERSION=1;
+          ibmcloud ks cluster config -c "${KUBERNETES_CLUSTER_NAME}";
+          kubectl get nodes;
+          kubectl get pods -A -o wide;
+          kubectl get networkpolicy -A -o wide;
+          
+          echo -e "=================\n                network policy                 \n==================";
+          
+          kubectl get networkpolicy -A -o yaml;
+          
+          
+          echo -e "==================\n                network policy                 \n==================";
+          kubectl describe networkpolicy -A;
+          
+          echo -e "===================\n               virtualservice               \n======================";
+          
+          
+          kubectl describe virtualservice -A;
+          echo -e "=====================\n        destinationrules          \n========================= ";
+          
+          
+          kubectl describe destinationrules -A;
+          
+          
+          echo -e "==================\n                 calicoctl             \n====================";
+          
+          curl -L https://github.com/projectcalico/calico/releases/download/v3.22.1/calicoctl-linux-amd64 -o calicoctl;
+          mv ./calicoctl /usr/local/bin/calicoctl;
+          chmod +x /usr/local/bin/calicoctl;
+          echo " ";
+         
+          calicoctl get globalnetworkpolicy --allow-version-mismatch;
+          
+          
+          wget https://github.com/mikefarah/yq/releases/download/v4.4.1/yq_linux_amd64 -O /usr/bin/yq &&\
+          chmod +x /usr/bin/yq
+          
+          kubectl get pods -o yaml | yq eval '{ .items[].metadata.name: .items[].spec.containers[0].image }' -;
+          
+          
+          
