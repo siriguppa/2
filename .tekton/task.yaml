@@ -90,9 +90,11 @@ spec:
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
           
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[]| select(.spec.podSelector|("{}")).metadata.name' - ;
+          kubectl get networkpolicy -A -o yaml |  yq eval '.items[]| select(.spec.podSelector ==("{}")).metadata.name' - ;
           
           
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[] | select(.spec.podSelector == "{}") |.metadata.name' - ;
+          
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes ==  "Ingress")' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec | (.policyTypes == "Egress") | .items[].metadata.name' - ;
           
