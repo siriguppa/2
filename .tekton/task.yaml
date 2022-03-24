@@ -89,7 +89,7 @@ spec:
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.podSelector' -;
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[].spec.policyTypes' -;
           
-          kubectl get networkpolicy -A -o yaml |  yq eval '{.items[].metadata.name .items[].spec.podSelector .items[].spec.policyTypes}' -;
+          kubectl get networkpolicy -A -o yaml |  yq eval 'select(.items[].metadata.name,.items[].spec.podSelector,.items[].spec.policyTypes)' -;
           
           
           kubectl get networkpolicy -A -o yaml |  yq eval '.items[] | select(.spec.podSelector == "{}") |.metadata.name' - ;
